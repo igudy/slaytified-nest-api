@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
+import { BulkUploadModule } from './bulk-upload/bulk-upload.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -16,6 +17,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     AuthModule,
     ProductsModule,
     OrdersModule,
+    BulkUploadModule, // Added bulk upload module
   ],
   controllers: [AppController],
   providers: [AppService],
