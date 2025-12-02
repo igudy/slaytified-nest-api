@@ -1,6 +1,3 @@
-// Excel Parser Service - parses Excel files to JSON
-// Converts uploaded Excel file into JavaScript objects
-
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as XLSX from 'xlsx';
 
@@ -35,19 +32,33 @@ export class ExcelParserService {
         defval: '', // Default value for empty cells
       });
 
+      console.log(jsonData);
+
       if (jsonData.length === 0) {
         throw new BadRequestException('Excel file is empty');
       }
 
       // Extract headers (first row)
       const headers = jsonData[0] as string[];
+      console.log(
+        '===> ~ ExcelParserService ~ parseExcelFile ~ headers:',
+        headers,
+      );
 
       // Convert rows to objects using headers
       const dataRows = jsonData.slice(1) as any[][];
+      console.log(
+        '===> ~ ExcelParserService ~ parseExcelFile ~ dataRows:',
+        dataRows,
+      );
 
       const parsedData = dataRows
-        .filter(row => row.some(cell => cell !== '' && cell !== null && cell !== undefined)) // Filter out empty rows
-        .map(row => {
+        .filter((row) =>
+          row.some(
+            (cell) => cell !== '' && cell !== null && cell !== undefined,
+          ),
+        ) // Filter out empty rows
+        .map((row) => {
           const obj: any = {};
           headers.forEach((header, index) => {
             // Normalize header names (remove *, trim, camelCase)
@@ -56,6 +67,10 @@ export class ExcelParserService {
           });
           return obj;
         });
+      console.log(
+        '===> ~ ExcelParserService ~ parseExcelFile ~ parsedData:',
+        parsedData,
+      );
 
       if (parsedData.length === 0) {
         throw new BadRequestException('No data found in Excel file');
@@ -66,7 +81,9 @@ export class ExcelParserService {
       if (error instanceof BadRequestException) {
         throw error;
       }
-      throw new BadRequestException('Failed to parse Excel file. Please ensure it is a valid Excel file.');
+      throw new BadRequestException(
+        'Failed to parse Excel file. Please ensure it is a valid Excel file.',
+      );
     }
   }
 
@@ -78,7 +95,14 @@ export class ExcelParserService {
     const data = this.parseExcelFile(fileBuffer, 'Products');
 
     // Validate that required columns exist
-    const requiredColumns = ['sku', 'name', 'description', 'price', 'category', 'stock'];
+    const requiredColumns = [
+      'sku',
+      'name',
+      'description',
+      'price',
+      'category',
+      'stock',
+    ];
     this.validateColumns(data[0], requiredColumns);
 
     return data;
@@ -109,7 +133,9 @@ export class ExcelParserService {
       .map((word, index) => {
         word = word.toLowerCase();
         // Capitalize first letter of each word except first
-        return index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1);
+        return index === 0
+          ? word
+          : word.charAt(0).toUpperCase() + word.slice(1);
       })
       .join('');
   }
@@ -124,12 +150,12 @@ export class ExcelParserService {
 
     const existingColumns = Object.keys(firstRow);
     const missingColumns = requiredColumns.filter(
-      col => !existingColumns.includes(col)
+      (col) => !existingColumns.includes(col),
     );
 
     if (missingColumns.length > 0) {
       throw new BadRequestException(
-        `Missing required columns: ${missingColumns.join(', ')}. Please use the provided template.`
+        `Missing required columns: ${missingColumns.join(', ')}. Please use the provided template.`,
       );
     }
   }

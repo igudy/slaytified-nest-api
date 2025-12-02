@@ -1,6 +1,3 @@
-// Bulk Upload Interfaces
-// These interfaces define the shape of data throughout the upload process
-
 export interface IProductRow {
   sku: string;
   name: string;
@@ -22,7 +19,7 @@ export interface IUserRow {
 export interface IUploadedRecord {
   rowNumber: number;
   data: any;
-  id?: string;  // Database ID after successful insert
+  id?: string; // Database ID after successful insert
 }
 
 export interface IFailedRecord {

@@ -1,6 +1,3 @@
-// Upload Result DTO
-// Data Transfer Object for individual upload results
-
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadResultDto {
@@ -19,9 +16,9 @@ export class UploadResultDto {
       properties: {
         field: { type: 'string' },
         message: { type: 'string' },
-        code: { type: 'string' }
-      }
-    }
+        code: { type: 'string' },
+      },
+    },
   })
   errors?: Array<{
     field: string;
